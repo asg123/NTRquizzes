@@ -1,4 +1,6 @@
-﻿<h1>Step 1</h1>
+﻿@model IEnumerable<AsgSearch.web.Classes.Item>
+
+<h1>Step 1</h1>
 <p>When a user enters some text in the textbox below and clicks 'Search', the application should show the first 40 Stackoverflow questions, with accepted answers, containing search terms terms in the title, body or tags. Along with the link, you must show:
     <ul>
         <li>question title</li>
@@ -24,7 +26,38 @@
     </li>
 </ul>
 
-<input type="text" />
-<button>Search!</button>
+<input id="searchText" type="text" />
+<button id="search">Search!</button>
+<h3 id="returnValue"></h3>
 <div id="results">
 </div>
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.score</td>
+            <td>@item.owner.display_name</td>
+        </tr>
+    }
+}
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#search').click(function () {
+                var searchTerm = $("#searchText").val();
+                $.ajax({
+                    url: "@Url.Action("Search", "Home")",
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: { 'searchTerm': searchTerm },
+                    success: function (result) {
+                        $('#returnValue').html(result);
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+}
