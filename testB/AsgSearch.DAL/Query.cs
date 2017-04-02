@@ -9,11 +9,22 @@ namespace AsgSearch.DAL
     {
         [Key]
         public int ID { get; set; }
-        public virtual string QueryText { get; set; }
-        public virtual DateTime Time { get; set; }
 
-        // HINT: You'll have to add some fields here... up to you!
+        public virtual string QueryText { get; set; }
+
+        public virtual DateTime? Time { get; set; }
+
+        public virtual string title { get; set; }
+
+        public virtual int creationDate { get; set; }
+
+        public virtual int answerCount { get; set; }
+
+        public virtual string displayName { get; set; }
+
+        public virtual string profileImage { get; set; }
+
+        public virtual string link { get; set; }
 
     }
-    
 }

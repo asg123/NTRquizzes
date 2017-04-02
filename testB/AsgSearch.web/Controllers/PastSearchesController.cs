@@ -29,7 +29,7 @@ namespace AsgSearch.web.Controllers
 
         public void Post([FromBody]Query value)
         {
-            _svc.SaveQuery(value.QueryText, value.Time);
+            _svc.SaveQuery(value);
         }
 
         public void Put(int id, [FromBody]Query value)

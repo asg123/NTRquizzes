@@ -1,13 +1,36 @@
 ﻿<h1>Step 3</h1>
-<p>This page should show the last 5 queries submitted by the users and their corresponding first result. Show all data that is rendered in step 1.</p>
-<h3>Hints:</h3>
-<ul>
-    <li>
-        You will need to modify the HomeController and QueryService classes.
-    </li>
-</ul>
+@if (ViewBag.TopFiveQuery != null)
+{
 
-<button>Refresh history</button>
+    foreach (var item in ViewBag.TopFiveQuery)
+    {
+        <div>
+            <span><b>Date Searched: </b>@item.Time</span>
+        </div>
+        <div>
+            <span><b>Query: </b>@item.QueryText</span>
+        </div>
+        <div>
+            <span><b>Title: </b>@item.title</span>
+            <span><b>Date: </b>@item.creationDate</span>
+            <span><b>Count: </b>@item.answerCount</span>
+            <span><b>Name: </b>@item.displayName</span>
+        </div>
+        <div>
+            <img src="@item.profileImage" />
+        </div>
+        <div>
+            <b>Answer: </b><a href="@item.link" target="_blank">@item.link</a>
+        </div>
+        <hr /><br />
+    }
+}
+else
+{
+    <h3>No Results.</h3>
+}
+@using (Html.BeginForm("Step3", "Home", FormMethod.Get))
+{
+    <button type="submit" class="btn btn-default">Refresh history</button>
+}
 
-<p></p>
-<p></p>
