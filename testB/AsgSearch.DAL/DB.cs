@@ -8,7 +8,10 @@ namespace AsgSearch.DAL
 {
     public class DB : DbContext
     {
-        public DB() : base("ASGsearchDB") { }
+        public DB() : base("ASGsearchDB")
+        {
+            Database.SetInitializer<DB>(null);
+        }
         public DbSet<Query> Queries { get; set; }
     }
 }

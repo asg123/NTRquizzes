@@ -22,18 +22,11 @@ namespace AsgSearch.web.Classes
 
         // HINT: For step 2 you'll need to add a new parameter so you can set a value for the
         // QueryResults collection in Query
-        public Query SaveQuery(string queryText, DateTime time)
+        public Query SaveQuery(Query query)
         {
-            var q =
-                new Query()
-                    {
-                        QueryText = queryText,
-                        Time = time
-                    };
-
-            context.Queries.Create(q);
+            context.Queries.Create(query);
             context.SaveChanges();
-            return q;
+            return query;
         }
 
         public void Dispose()

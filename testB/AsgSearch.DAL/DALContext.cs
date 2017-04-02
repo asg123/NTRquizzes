@@ -20,7 +20,8 @@ namespace AsgSearch.DAL
         public int SaveChanges()
         {
             // HINT: Implementation is a one-liner! :)
-            throw new NotImplementedException();
+            dbContext.Queries.Add(dbContext.Queries.Create());
+            return dbContext.SaveChanges();
         }
 
         public void Dispose()

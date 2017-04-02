@@ -10,6 +10,8 @@ using System.Web;
 using System.Web.Script.Serialization;
 using System.Net.Http.Headers;
 using AsgSearch.web.Classes;
+using AsgSearch.DAL;
+using System.Linq;
 
 namespace AsgSearch.web.Controllers
 {
@@ -26,17 +28,43 @@ namespace AsgSearch.web.Controllers
             ViewBag.Title = "Step 1";
             ViewBag.items = Session["items"];
             ViewBag.SearchTerm = Session["SearchTerm"];
+
+            if(ViewBag.items != null && ViewBag.SearchTerm != null)
+            {
+                var newQuery = new Query();
+                newQuery.title = ViewBag.items[0].title;
+                newQuery.creationDate = ViewBag.items[0].creation_date;
+                newQuery.answerCount = ViewBag.items[0].answer_count;
+                newQuery.displayName = ViewBag.items[0].owner.display_name;
+                newQuery.profileImage = ViewBag.items[0].owner.profile_image;
+                newQuery.link = ViewBag.items[0].link;
+                newQuery.QueryText = ViewBag.SearchTerm;
+                newQuery.Time = DateTime.Now;
+                
+                //TODO: Implement Container
+                IQueryService query = new QueryService(new DALContext());
+                //TODO: Check Null Insert
+                query.SaveQuery(newQuery);
+            }
+            
             return View();
         }
         public ActionResult Step2()
         {
             ViewBag.Title = "Step 2";
-
             return View();
         }
         public ActionResult Step3()
         {
             ViewBag.Title = "Step 3";
+            IQueryService query = new QueryService(new DALContext());
+            var result = query.GetQueries();
+
+            var topFiveResult = result.Where(n => n.Time != null)
+                                .OrderByDescending(n => n.Time)
+                                .Take(5);
+
+            ViewBag.TopFiveQuery = topFiveResult;
 
             return View();
         }
@@ -67,7 +95,8 @@ namespace AsgSearch.web.Controllers
                     Session["items"] = ro.items;
 
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 //TODO: Handle error
             }
