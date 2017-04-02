@@ -24,7 +24,8 @@ namespace AsgSearch.web.Controllers
         public ActionResult Step1()
         {
             ViewBag.Title = "Step 1";
-
+            ViewBag.items = Session["items"];
+            ViewBag.SearchTerm = Session["SearchTerm"];
             return View();
         }
         public ActionResult Step2()
@@ -45,10 +46,11 @@ namespace AsgSearch.web.Controllers
             //TODO: Add Summary,comments, log and handle service call in other layers to improve test ability.
             var response = String.Empty;
             RootObject ro = null;
+            Session["SearchTerm"] = searchTerm;
             try
             {
-                var apiUrl = "http://api.stackexchange.com/2.2/search/advanced?pagesize=40&q={0}&accepted=True&body={1}&tagged={2}&site=stackoverflow";
-                apiUrl = String.Format(apiUrl, searchTerm, searchTerm, searchTerm);
+                var apiUrl = "http://api.stackexchange.com/2.2/search/advanced?pagesize=40&q={0}&accepted=True&site=stackoverflow";
+                apiUrl = String.Format(apiUrl, searchTerm);
 
                 HttpClientHandler handler = new HttpClientHandler();
                 handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
@@ -61,16 +63,17 @@ namespace AsgSearch.web.Controllers
 
                     JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                     ro = json_serializer.Deserialize<RootObject>(response);
-                    ViewBag.items = ro.items;
+
+                    Session["items"] = ro.items;
+
                 }
             }catch(Exception e)
             {
                 //TODO: Handle error
-                return Content("Failure");
             }
-            
+
             //TODO: Return better response
-            return PartialView("Step1", ro.items);
+            return View("Step1");
         }
     }
 }

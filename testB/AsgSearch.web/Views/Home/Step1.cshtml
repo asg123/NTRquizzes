@@ -26,20 +26,48 @@
     </li>
 </ul>
 
-<input id="searchText" type="text" />
+<input id="searchText" type="text" value="@ViewBag.SearchTerm" />
 <button id="search">Search!</button>
 <h3 id="returnValue"></h3>
 <div id="results">
 </div>
-@if (Model != null)
+@if (ViewBag.items != null)
 {
-    foreach (var item in Model)
+    if (ViewBag.items.Count == 0)
     {
-        <tr>
-            <td>@item.score</td>
-            <td>@item.owner.display_name</td>
-        </tr>
+        <h3>No Results.</h3>
     }
+    else
+    {
+        foreach (var item in ViewBag.items)
+        {
+            <div>
+                <span><b>Title: </b>@item.title</span>
+                <span><b>Date: </b>@item.creation_date</span>
+                <span><b>Count: </b>@item.answer_count</span>
+                <span><b>Name: </b>@item.owner.display_name</span>
+            </div>
+            <div>
+                @foreach (var tag in item.tags)
+                {
+                    <span><b>Tags: </b>@tag </span>
+                }
+            </div>
+            <div>
+                <img src="@item.owner.profile_image" />
+            </div>
+            <div>
+                <span><b>Answer: </b>@item.accepted_answer_id</span>
+                <a href="@item.link" target="_blank">@item.link</a>
+            </div>
+            <hr /><br />
+        }
+    }
+
+}
+else
+{
+    <h3>No Results.</h3>
 }
 
 @section Scripts{
@@ -54,6 +82,7 @@
                     data: { 'searchTerm': searchTerm },
                     success: function (result) {
                         $('#returnValue').html(result);
+                        location.reload();
                     }
                 });
                 return false;
