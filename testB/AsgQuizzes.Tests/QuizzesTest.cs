@@ -17,10 +17,24 @@ namespace AsgQuizzes.Tests
         }
 
         [TestMethod]
-        public void PostfixCalc1()
+        public void PostfixCalc1a()
         {
             var qs = new Quizzes();
             Assert.AreEqual(100, qs.PostFixCalc("5 5 + 10 *"));
+        }
+
+        [TestMethod]
+        public void PostfixCalc1b()
+        {
+            var qs = new Quizzes();
+            Assert.AreEqual(26, qs.PostFixCalc("2 3 8 * +"));
+        }
+
+        [TestMethod]
+        public void PostfixCalc1c()
+        {
+            var qs = new Quizzes();
+            Assert.AreEqual(-2, qs.PostFixCalc("8 1 2 3 + - /"));
         }
 
         [TestMethod]
